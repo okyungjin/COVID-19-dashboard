@@ -49,7 +49,7 @@ npm i -D typescript
 {
   "compilerOptions": {
     "allowJs": true,
-    "target": "ES5", // tsc로 변환할 js version
+    "target": "ES5",
     "outDir": "./built",
     "moduleResolution": "Node"
   },
