@@ -33,3 +33,47 @@ function fetchCovidSummary() {
   return axios.get(url);
 }
 ```
+
+### 2) TypeScript 환경 구성
+**2-1. init npm & TypeScript 라이브러리 설치**
+
+```bash
+npm init -y
+npm i -D typescript
+```
+
+**2-2. TypeScript 설정 파일 생성 및 기본값 추가**
+
+`tsconfig.json` 추가
+```json
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "ES5", // tsc로 변환할 js version
+    "outDir": "./built",
+    "moduleResolution": "Node"
+  },
+  "include": ["./src/**/*"]
+}
+```
+
+- `"allowJs": true` 프로젝트에 js 파일 사용 가능하도록 설정
+- `"target": "ES5"` tsc로 변환할 js의 버전을 ES5로 설정
+- `"outDir": "./built"` 결과물이 담길 디렉토리를 `./built` 로 지정
+- `"moduleResolution": "Node"` Promise base로 구현할 수 있도록 Node 기반으로 설정
+- `"include": ["./src/*]` 해당 프로젝트에 어떤 파일들을 tsc로 변환할 것인지 설정, `src` 디렉토리 이하의 모든 폴더의 파일(`./**/*`을 대상으로 하겠다.
+
+**2-3. JavaScript 파일을 TypeScript로 변환**
+`app.js` 를 `app.ts` 로 변환
+
+**2-4. `tsc` 명령어로 TypeScript 변환 수행**
+
+`package.json` 에 `build` script 추가
+```diff
+"scripts": {
+   "test": "echo \"Error: no test specified\" && exit 1",
++  "build": "tsc" 
+},
+```
+
+

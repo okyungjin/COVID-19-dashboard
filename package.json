@@ -1,0 +1,24 @@
+{
+  "name": "covid-19-dashboard",
+  "version": "1.0.0",
+  "description": "- [Table of Contents](#table-of-contents) - [About COVID-19-dashboard](#about-covid-19-dashboard) - [Dev Notes](#dev-notes)   - [JavaScript 프로젝트에 TypeScript 적용하기](#javascript-프로젝트에-typescript-적용하기)     - [1) JSDoc으로 점진적인 타입 적용](#1-jsdoc으로-점진적인-타입-적용)     - [2) TypeScript 환경 구성](#2-typescript-환경-구성) # About COVID-19-dashboard JavaScript로 제작된 **COVID-19 Dashboard**에 TypeScript를 점진적으로 적용해나가는 프로젝트입니다.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc" 
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/okyungjin/COVID-19-dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/okyungjin/COVID-19-dashboard/issues"
+  },
+  "homepage": "https://github.com/okyungjin/COVID-19-dashboard#readme",
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
+}
