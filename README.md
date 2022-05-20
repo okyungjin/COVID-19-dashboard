@@ -5,6 +5,10 @@
   - [JavaScript 프로젝트에 TypeScript 적용하기](#javascript-프로젝트에-typescript-적용하기)
     - [1) JSDoc으로 점진적인 타입 적용](#1-jsdoc으로-점진적인-타입-적용)
     - [2) TypeScript 환경 구성](#2-typescript-환경-구성)
+    - [3) 명시적인 any 선언하기](#3-명시적인-any-선언하기)
+  - [Arrow Function](#arrow-function)
+- [Troubleshooting](#troubleshooting)
+  - [TypeScript에서 Promise를 사용할 때 발생하는 오류](#typescript에서-promise를-사용할-때-발생하는-오류)
 # About COVID-19-dashboard
 JavaScript로 제작된 **COVID-19 Dashboard**에 TypeScript를 점진적으로 적용해나가는 프로젝트입니다.
 
@@ -74,6 +78,58 @@ npm i -D typescript
    "test": "echo \"Error: no test specified\" && exit 1",
 +  "build": "tsc" 
 },
+```
+### 3) 명시적인 any 선언하기
+`tsconfig.json` 의 `noImplicitAny` 속성을 `true` 로 설정한다.
+
+```diff
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "ES5", // tsc로 변환할 js version
+    "outDir": "./built",
+    "moduleResolution": "Node",
+    "lib": ["ES2015", "DOM", "DOM.Iterable"],
++   "noImplicitAny": true
+  },
+  "include": ["./src/**/*"]
+}
+```
+
+## Arrow Function
+
+**Arrow Function in JavaScript**
+
+```js
+// ES5 - 함수 선언문
+function sum(a, b) {
+  return a + b;
+}
+
+// ES5 - 함수 표현식
+var sum = function(a, b) {
+  return a + b;
+}
+
+// ES6+ - 함수 표현식 (화살표 함수)
+var sum = (a, b) => {
+  return a + b;
+};
+
+var sum = (a, b) => a + b;
+```
+
+<br>
+
+**Arrow Function in TypeScript**
+
+```ts
+// 화살표 함수 + TypeScript
+var sum = (a: number, b: number): number => {
+  return a + b;
+};
+
+var sum = (a: number, b: number): number => a + b;
 ```
 
 # Troubleshooting
