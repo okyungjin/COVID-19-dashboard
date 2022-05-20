@@ -3,7 +3,8 @@
     "allowJs": true,
     "target": "ES5", // tsc로 변환할 js version
     "outDir": "./built",
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "lib": ["ES2015", "DOM", "DOM.Iterable"]
   },
   "include": ["./src/**/*"]
 }

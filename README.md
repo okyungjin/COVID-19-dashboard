@@ -76,4 +76,26 @@ npm i -D typescript
 },
 ```
 
+# Troubleshooting
+## TypeScript에서 Promise를 사용할 때 발생하는 오류
 
+`app.ts` 에서 async를 사용하는 `handleListClick` 함수에 hover를 해보면 다음과 같은 오류 메세지를 확인할 수 있다.
+
+> An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.ts(2705)
+
+`package.json` 에서 `"lib": ["ES2015"]` 속성을 추가해주면 해결된다.
+
+프로젝트에서 TypeScript로 DOM 조작을 하는 부분이 있으므로, `"DOM", "DOM.Iterable"` 도 미리 추가해두면 좋다.
+
+```diff
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "ES5", // tsc로 변환할 js version
+    "outDir": "./built",
+    "moduleResolution": "Node",
++   "lib": ["ES2015", "DOM", "DOM.Iterable"]
+  },
+  "include": ["./src/**/*"]
+}
+```
