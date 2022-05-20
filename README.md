@@ -7,6 +7,7 @@
     - [2) TypeScript 환경 구성](#2-typescript-환경-구성)
     - [3) 명시적인 any 선언하기](#3-명시적인-any-선언하기)
   - [Arrow Function](#arrow-function)
+  - [DOM 함수 타입 오류 해결하기](#dom-함수-타입-오류-해결하기)
 - [Troubleshooting](#troubleshooting)
   - [TypeScript에서 Promise를 사용할 때 발생하는 오류](#typescript에서-promise를-사용할-때-발생하는-오류)
 # About COVID-19-dashboard
@@ -130,6 +131,42 @@ var sum = (a: number, b: number): number => {
 };
 
 var sum = (a: number, b: number): number => a + b;
+```
+
+## DOM 함수 타입 오류 해결하기
+DOM 함수의 반환 값에 `innerHTML` 을 접근하니 다음과 같은 오류가 발생했다.
+
+> any
+> Property 'innerText' does not exist on type 'Element'.ts(2339)
+
+<img width="500" alt="innerHTML does not exist" src="https://user-images.githubusercontent.com/31913666/169526577-6c011964-9cdb-46fc-bd40-d0036e02ab9a.png">
+
+해당 이슈가 발생하는 원인은 TypeScript가 `document.querySelector()` 의 반환값을 `Element` 타입으로 추론했기 때문이다.
+
+```ts
+function $(selector: string) {
+  return document.querySelector(selector);
+}
+```
+
+VSCode를 이용하여 `Element` 의 인터페이스로 이동해보면 `innerHTML` 속성이 없는 것을 확인할 수 있다. 즉, `Element` 타입에서 없는 속성에 접근하려니 오류가 발생하는 것이다.
+
+`deathsTotal` 변수의 querySelector 인자인  `.deaths` 를 index.html에서 찾아보면 `<p>` 태그인 것을 확인할 수 있다.
+
+```html
+<p class="total deaths">0</p>
+```
+
+따라서 오류를 해결하기 위해서는 TypeScript에게 타입 단언으로 타입 명시를 해주어야 한다.
+
+`HTMLParagraphElement` 타입으로 단언해주면 오류가 사라진다.
+
+```ts
+// p tag
+const deathsTotal = $('.deaths') as HTMLParagraphElement;
+
+// 참고로 span tag는 다음과 같이 명시해준다.
+const confirmedTotal = $('.confirmed-total') as HTMLSpanElement;
 ```
 
 # Troubleshooting
