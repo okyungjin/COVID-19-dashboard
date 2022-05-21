@@ -8,6 +8,10 @@
     - [3) 명시적인 any 선언하기](#3-명시적인-any-선언하기)
   - [Arrow Function](#arrow-function)
   - [DOM 함수 타입 오류 해결하기](#dom-함수-타입-오류-해결하기)
+  - [devDependencies에 추가한 라이브러리](#devdependencies에-추가한-라이브러리)
+    - [Babel](#babel)
+    - [ESLint](#eslint)
+    - [Prettier](#prettier)
 - [Troubleshooting](#troubleshooting)
   - [TypeScript에서 Promise를 사용할 때 발생하는 오류](#typescript에서-promise를-사용할-때-발생하는-오류)
 # About COVID-19-dashboard
@@ -167,6 +171,66 @@ const deathsTotal = $('.deaths') as HTMLParagraphElement;
 
 // 참고로 span tag는 다음과 같이 명시해준다.
 const confirmedTotal = $('.confirmed-total') as HTMLSpanElement;
+```
+## devDependencies에 추가한 라이브러리
+### Babel
+
+```json
+"@babel/core": "^7.18.0",
+"@babel/preset-env": "^7.18.0",
+"@babel/preset-typescript": "^7.17.12",
+```
+최신 JavaScript 문법을 브라우저에서 호환 가능한 하위 버전으로 변경해주는 **JavaScript 컴파일러**이다. JavaScript 소스를 JavaScript로 변환해준다는 의미에서 `transcompiler` 라고도 한다.
+(컴파일, 트랜스파일, 트랜스컴파일 용어가 혼용되어 사용됨)
+
+`@babel/preset-env` 라이브러리에 `preset` 이라는 용어가 보이는데, 이는 **plugin의 집합**을 말한다.
+
+### ESLint
+
+```json
+"@typescript-eslint/eslint-plugin": "^5.25.0",
+"@typescript-eslint/parser": "^5.25.0",
+"eslint": "^8.15.0",
+"eslint-plugin-prettier": "^4.0.0",
+```
+
+JavaScript 소스를 작성할 때 오류가 날 것 같은 구문들에 대한 힌트를 주는 보조 도구이며, 문법 힌트 외에도 포맷팅의 기능도 있다.
+
+`.eslintrc.js` 파일에 옵션을 수정하여 ESLint 설정을 커스텀할 수 있다.
+
+> **TSLint를 사용하지 않고 ESLint를 사용하는 이유**
+> 
+> ESLint가 TSLint 보다 성능이 좋아서, TypeScript를 만든 회사인 Microsoft가 TSLint를 deprecate하고 ESLint에 contribute하는 방향으로 진행하겠다고 밝혔다. 따라서 ESLint에 TypeScript에 대한 설정을 추가하는 방식으로 사용된다.
+
+
+### Prettier
+
+```json
+"prettier": "^2.6.2",
+```
+
+Prettier를 코드 포맷팅 규칙을 커스텀할 수 있다.
+팀 단위로 코딩 컨벤션을 정의하여 적용하는 경우가 많고, 컨벤션 유무에 따라 가독성에 큰 차이가 있으니 가급적 사용하는 것을 추천한다.
+
+Prettier의 설정이 `.eslintrc.js` 파일의 `rules` 에 위치하고 있는데, 이는 `eslint-plugin-prettier` 가 설치되어 있기 때문이다. ESLint 설정 파일에서 Prettier 옵션을 인식할 수 있도록 도와주는 라이브러리이다.
+
+```js
+{
+  rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        singleQuote: true,
+        semi: true,
+        useTabs: false,
+        tabWidth: 2,
+        printWidth: 80,
+        bracketSpacing: true,
+        arrowParens: 'avoid',
+      },
+    ],
+  },
+}
 ```
 
 # Troubleshooting
