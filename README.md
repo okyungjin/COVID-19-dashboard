@@ -1,20 +1,24 @@
 # Table of Contents
 - [Table of Contents](#table-of-contents)
-- [About COVID-19-dashboard](#about-covid-19-dashboard)
-- [Dev Notes](#dev-notes)
+- [🙌 About COVID-19-dashboard](#-about-covid-19-dashboard)
+- [🔨 Dev Notes](#-dev-notes)
   - [JavaScript 프로젝트에 TypeScript 적용하기](#javascript-프로젝트에-typescript-적용하기)
     - [1) JSDoc으로 점진적인 타입 적용](#1-jsdoc으로-점진적인-타입-적용)
     - [2) TypeScript 환경 구성](#2-typescript-환경-구성)
     - [3) 명시적인 any 선언하기](#3-명시적인-any-선언하기)
+    - [4) 프로젝트 환경 구성](#4-프로젝트-환경-구성)
+    - [5) 외부 라이브러리 모듈화](#5-외부-라이브러리-모듈화)
   - [Arrow Function](#arrow-function)
   - [DOM 함수 타입 오류 해결하기](#dom-함수-타입-오류-해결하기)
   - [devDependencies에 추가한 라이브러리](#devdependencies에-추가한-라이브러리)
     - [Babel](#babel)
     - [ESLint](#eslint)
     - [Prettier](#prettier)
-- [Troubleshooting](#troubleshooting)
+- [🔫 Troubleshooting](#-troubleshooting)
   - [TypeScript에서 Promise를 사용할 때 발생하는 오류](#typescript에서-promise를-사용할-때-발생하는-오류)
-# About COVID-19-dashboard
+  - [외부 라이브러리 import 시에 발생하는 오류](#외부-라이브러리-import-시에-발생하는-오류)
+    - [1) 타입 정의 라이브러리 설치](#1-타입-정의-라이브러리-설치)
+# 🙌 About COVID-19-dashboard
 JavaScript로 제작된 **COVID-19 Dashboard**에 TypeScript를 점진적으로 적용해나가는 프로젝트입니다.
 
 **관련 문서**
@@ -23,7 +27,7 @@ JavaScript로 제작된 **COVID-19 Dashboard**에 TypeScript를 점진적으로 
 - [Postman API](https://documenter.getpostman.com/view/10808728/SzS8rjbc?version=latest#27454960-ea1c-4b91-a0b6-0468bb4e6712)
 - [Type Vue without Typescript](https://blog.usejournal.com/type-vue-without-typescript-b2b49210f0b)
 
-# Dev Notes
+# 🔨 Dev Notes
 ## JavaScript 프로젝트에 TypeScript 적용하기
 JSDoc을 사용하여 점진적인 타입 시스템을 도입하는 방법이 있지만, 사용법이 불편하여 비용이 많이 든다.
 ### 1) JSDoc으로 점진적인 타입 적용
@@ -86,6 +90,7 @@ npm i -D typescript
 ```
 ### 3) 명시적인 any 선언하기
 `tsconfig.json` 의 `noImplicitAny` 속성을 `true` 로 설정한다.
+가능하면 구체적으로 타입을 정의한다.
 
 ```diff
 {
@@ -100,6 +105,11 @@ npm i -D typescript
   "include": ["./src/**/*"]
 }
 ```
+### 4) 프로젝트 환경 구성
+- Babel, ESLint, Prettier 환경 설정
+
+### 5) 외부 라이브러리 모듈화
+
 
 ## Arrow Function
 
@@ -143,7 +153,7 @@ DOM 함수의 반환 값에 `innerHTML` 을 접근하니 다음과 같은 오류
 > any
 > Property 'innerText' does not exist on type 'Element'.ts(2339)
 
-<img width="500" alt="innerHTML does not exist" src="https://user-images.githubusercontent.com/31913666/169526577-6c011964-9cdb-46fc-bd40-d0036e02ab9a.png">
+<img width="700" alt="innerHTML does not exist" src="https://user-images.githubusercontent.com/31913666/169526577-6c011964-9cdb-46fc-bd40-d0036e02ab9a.png">
 
 해당 이슈가 발생하는 원인은 TypeScript가 `document.querySelector()` 의 반환값을 `Element` 타입으로 추론했기 때문이다.
 
@@ -233,7 +243,9 @@ Prettier의 설정이 `.eslintrc.js` 파일의 `rules` 에 위치하고 있는�
 }
 ```
 
-# Troubleshooting
+<br>
+
+# 🔫 Troubleshooting
 ## TypeScript에서 Promise를 사용할 때 발생하는 오류
 
 `app.ts` 에서 async를 사용하는 `handleListClick` 함수에 hover를 해보면 다음과 같은 오류 메세지를 확인할 수 있다.
@@ -256,3 +268,56 @@ Prettier의 설정이 `.eslintrc.js` 파일의 `rules` 에 위치하고 있는�
   "include": ["./src/**/*"]
 }
 ```
+
+## 외부 라이브러리 import 시에 발생하는 오류
+
+
+> **❗️주의**
+> 
+> 강의 시점에는 chart.js를 설치하면 `types` 디렉토리가 없는데 실습 시점에는 포함되어 있어서 같은 오류는 발생하지 않았다. 하지만, 프로젝트를 진행하면서 해당 유형의 이슈가 발생할 수도 있으므로, import 시에 타입 오류가 발생한다고 가정하여 README를 작성하였다.
+
+
+`npm i chart.js` 명령어를 이용해 라이브러리를 설치 후, `app.ts` 에서 정상적으로 import를 해주었으나 오류가 발생한다.
+
+(But, axios는 동일하게 import를 해도 오류가 발생하지 않는다.)
+
+<img width="700" alt="chartjs-import-error" src="https://user-images.githubusercontent.com/31913666/169651298-eeddac69-ad4c-4d5c-bdb7-1657fd5b5e46.png">
+
+이는 `index.d.ts` 파일이 누락되어 발생하는 오류이다. TypeScript는 모듈을 해석할 때 `index.d.ts` 파일을 참고하기 때문이다.
+
+> **왜 이런 방식으로 되어있는가?**
+> 
+> 모듈 생성 시점에는 JavaScript로 만들어졌다가, TypeScript 생태계가 커지면서 이에 대응하기 위해 `index.d.ts` 파일을 추가하게 되었기 때문이다. **즉, 외부 JavaScript 라이브러리를 TypeScript가 사용할 수 있도록 타입을 지정해준 파일**이 `index.d.ts` 이다.
+
+이를 해결하는 방법에는 2가지가 있다.
+- 타입을 정의해둔 라이브러리를 설치
+- 구현체의 타입을 정의한 라이브러리가 없다면 `index.d.ts` 를 직접 작성
+
+### 1) 타입 정의 라이브러리 설치
+
+오류 메세지에 안내된 [@types/chart.js](https://www.npmjs.com/package/@types/chart.js)를 들어가보면 chart.js의 구현체에 대한 타입이 정의되어 있는 것을 확인할 수 있다.
+
+`npm i @types/chart.js` 로 설치하면 `@types/chart.js` 가 설치된다.
+
+<img width="272" alt="type-chartjs" src="https://user-images.githubusercontent.com/31913666/169656501-5a8c2242-8219-4aa3-802a-f2a289bb80d8.png">
+
+<br>
+
+import 부분을 확인해보면 `from 'chart.js'` 부분의 오류가 사라진 것을 확인할 수 있다.
+But, `import Chart` 에 다른 오류가 발생하고 있다.
+
+<img width="700" alt="import-chart-error" src="https://user-images.githubusercontent.com/31913666/169656590-226cab56-5dd7-410a-9d2c-a024dc2354ce.png">
+
+<br>
+
+해당 이슈는 import 방식을 다음과 같이 변경하면 해결된다.
+
+```ts
+import * as Chart from 'chart.js';
+```
+
+> `import * as Chart` **를 사용해야 하는 이유**
+> 
+> CommomJS로 만들어진 라이브러리를 ES6 module codebase에서 import 하기 위해서는 `* as Chart` 와 같ㅇ은 방식을 사용해야 한다.
+> 관련 [stack overflow 링크](https://stackoverflow.com/questions/56238356/understanding-esmoduleinterop-in-tsconfig-file) 참고
+
