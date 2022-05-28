@@ -1,7 +1,7 @@
-# Table of Contents
-- [Table of Contents](#table-of-contents)
+# 🏷 Table of Contents
+- [🏷 Table of Contents](#-table-of-contents)
 - [🙌 About COVID-19-dashboard](#-about-covid-19-dashboard)
-- [🔨 Dev Notes](#-dev-notes)
+- [📕 Dev Notes](#-dev-notes)
   - [JavaScript 프로젝트에 TypeScript 적용하기](#javascript-프로젝트에-typescript-적용하기)
     - [1) JSDoc으로 점진적인 타입 적용](#1-jsdoc으로-점진적인-타입-적용)
     - [2) TypeScript 환경 구성](#2-typescript-환경-구성)
@@ -17,7 +17,10 @@
 - [🔫 Troubleshooting](#-troubleshooting)
   - [TypeScript에서 Promise를 사용할 때 발생하는 오류](#typescript에서-promise를-사용할-때-발생하는-오류)
   - [외부 라이브러리 import 시에 발생하는 오류](#외부-라이브러리-import-시에-발생하는-오류)
-    - [1) 타입 정의 라이브러리 설치](#1-타입-정의-라이브러리-설치)
+    - [[CASE #1] 타입 정의 라이브러리 설치](#case-1-타입-정의-라이브러리-설치)
+    - [[CASE #2] 타입 선언 라이브러리가 제공되지 않는 외부 라이브러리 사용](#case-2-타입-선언-라이브러리가-제공되지-않는-외부-라이브러리-사용)
+      - [1) `typeRoots` 에 경로 지정](#1-typeroots-에-경로-지정)
+      - [2) `index.d.ts` 생성](#2-indexdts-생성)
 # 🙌 About COVID-19-dashboard
 JavaScript로 제작된 **COVID-19 Dashboard**에 TypeScript를 점진적으로 적용해나가는 프로젝트입니다.
 
@@ -27,7 +30,7 @@ JavaScript로 제작된 **COVID-19 Dashboard**에 TypeScript를 점진적으로 
 - [Postman API](https://documenter.getpostman.com/view/10808728/SzS8rjbc?version=latest#27454960-ea1c-4b91-a0b6-0468bb4e6712)
 - [Type Vue without Typescript](https://blog.usejournal.com/type-vue-without-typescript-b2b49210f0b)
 
-# 🔨 Dev Notes
+# 📕 Dev Notes
 ## JavaScript 프로젝트에 TypeScript 적용하기
 JSDoc을 사용하여 점진적인 타입 시스템을 도입하는 방법이 있지만, 사용법이 불편하여 비용이 많이 든다.
 ### 1) JSDoc으로 점진적인 타입 적용
@@ -293,7 +296,7 @@ Prettier의 설정이 `.eslintrc.js` 파일의 `rules` 에 위치하고 있는�
 - 타입을 정의해둔 라이브러리를 설치
 - 구현체의 타입을 정의한 라이브러리가 없다면 `index.d.ts` 를 직접 작성
 
-### 1) 타입 정의 라이브러리 설치
+### [CASE #1] 타입 정의 라이브러리 설치
 
 오류 메세지에 안내된 [@types/chart.js](https://www.npmjs.com/package/@types/chart.js)를 들어가보면 chart.js의 구현체에 대한 타입이 정의되어 있는 것을 확인할 수 있다.
 
@@ -321,3 +324,33 @@ import * as Chart from 'chart.js';
 > CommomJS로 만들어진 라이브러리를 ES6 module codebase에서 import 하기 위해서는 `* as Chart` 와 같ㅇ은 방식을 사용해야 한다.
 > 관련 [stack overflow 링크](https://stackoverflow.com/questions/56238356/understanding-esmoduleinterop-in-tsconfig-file) 참고
 
+### [CASE #2] 타입 선언 라이브러리가 제공되지 않는 외부 라이브러리 사용
+사용하려는 라이브러리에 대한 타입 선언 라이브러리가 존재하지 않는다면 다음과 같은 방법으로 해결할 수 있다.
+
+#### 1) `typeRoots` 에 경로 지정
+
+`tsconfig.json` 에 `typeRoots` 을 추가한다. TypeScript는 타입 정의를 가져오기 위해 `./node_modules/@types` 경로 먼저 살펴본다. (`./node_modules/@types` 경로가 기본 값)
+
+여기에 내가 직접 지정할 타입을 저장할 디렉토리인 `types` 도 추가해준다.
+
+
+```diff
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "ES5", // tsc로 변환할 js version
+    "outDir": "./built",
+    "moduleResolution": "Node",
+    "lib": ["ES2015", "DOM", "DOM.Iterable"],
+    "noImplicitAny": true,
++   "typeRoots": ["./node_modules/@types", "types"]
+  },
+  "include": ["./src/**/*"]
+}
+```
+
+#### 2) `index.d.ts` 생성
+
+루트 디렉토리에 `types` 디렉토리가 없다면 생성하고, 하위에 `chart.js/index.d.ts` 파일을 생성한다.
+
+**`index.d.ts` 파일은 TypeScript의 타입 정의만 해놓은 파일**이다.
