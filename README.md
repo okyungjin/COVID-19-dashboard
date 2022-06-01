@@ -21,6 +21,7 @@
     - [[CASE #2] 타입 선언 라이브러리가 제공되지 않는 외부 라이브러리 사용](#case-2-타입-선언-라이브러리가-제공되지-않는-외부-라이브러리-사용)
       - [1) `typeRoots` 에 경로 지정](#1-typeroots-에-경로-지정)
       - [2) `index.d.ts` 생성](#2-indexdts-생성)
+  - [Uncaught SyntaxError: Unexpected token 'export'](#uncaught-syntaxerror-unexpected-token-export)
 # 🙌 About COVID-19-dashboard
 JavaScript로 제작된 **COVID-19 Dashboard**에 TypeScript를 점진적으로 적용해나가는 프로젝트입니다.
 
@@ -365,4 +366,37 @@ declare module 'chart.js' {
 `app.ts` 의 import 부분에서 `chart.js` 의 경로를 확인해보면 직접 선언한 module로 잡히는 것을 볼 수 있다. 이는 `typeRoots` 에 `types` 를 추가해주었기 때문에 인식이 가능한 것이다.
 
 <img width="345" alt="declare-moudle" src="https://user-images.githubusercontent.com/31913666/171395501-94d0cfeb-efc4-44b5-acce-fa0408b56fc7.png">
+
+
+## Uncaught SyntaxError: Unexpected token 'export'
+html이 이해할 수 있도록 tsc로 컴파일된 `/built/app.js` 로 path를 변경해주었더니 다음과 같은 오류가 발생했다.
+
+> Uncaught SyntaxError: Unexpected token 'export' (at app.js:261:1)
+
+이를 해결하기 위해서는 다음 2가지 사항을 수정하면 된다.
+1. html에서 ES Module을 사용하여 script를 불러오기 위해서는 `type="module"` 을 추가해주어야 한다.
+  
+```diff
+<body>
+- <script src="./built/app.js"></script>
++ <script type="module" src="./built/app.js"></script>
+</body>
+```
+
+2. `tsconfig.json` 에 `"module": "ES2015"` 속성을 추가한다.
+```diff
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "ES5", // tsc로 변환할 js version
+    "outDir": "./built",
++   "module": "ES2015",
+    "moduleResolution": "Node",
+    "lib": ["ES2015", "DOM", "DOM.Iterable"],
+    "noImplicitAny": true,
+    "typeRoots": ["./node_modules/@types", "types"],
+  },
+  "include": ["./src/**/*"]
+}
+```
 
