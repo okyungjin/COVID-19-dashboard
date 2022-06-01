@@ -1,6 +1,3 @@
-import axios from 'axios';
-import { Chart } from 'chart.js';
-
 // utils
 function $(selector: string) {
   return document.querySelector(selector);
