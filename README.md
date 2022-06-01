@@ -354,3 +354,15 @@ import * as Chart from 'chart.js';
 루트 디렉토리에 `types` 디렉토리가 없다면 생성하고, 하위에 `chart.js/index.d.ts` 파일을 생성한다.
 
 **`index.d.ts` 파일은 TypeScript의 타입 정의만 해놓은 파일**이다.
+
+```ts
+declare module 'chart.js' {
+  // ...
+  // interface ...
+}
+```
+
+`app.ts` 의 import 부분에서 `chart.js` 의 경로를 확인해보면 직접 선언한 module로 잡히는 것을 볼 수 있다. 이는 `typeRoots` 에 `types` 를 추가해주었기 때문에 인식이 가능한 것이다.
+
+<img width="345" alt="declare-moudle" src="https://user-images.githubusercontent.com/31913666/171395501-94d0cfeb-efc4-44b5-acce-fa0408b56fc7.png">
+
