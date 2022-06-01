@@ -321,7 +321,7 @@ import * as Chart from 'chart.js';
 
 > `import * as Chart` **를 사용해야 하는 이유**
 > 
-> CommomJS로 만들어진 라이브러리를 ES6 module codebase에서 import 하기 위해서는 `* as Chart` 와 같ㅇ은 방식을 사용해야 한다.
+> CommomJS로 만들어진 라이브러리를 ES6 module codebase에서 import 하기 위해서는 `* as Chart` 와 같은 방식을 사용해야 한다.
 > 관련 [stack overflow 링크](https://stackoverflow.com/questions/56238356/understanding-esmoduleinterop-in-tsconfig-file) 참고
 
 ### [CASE #2] 타입 선언 라이브러리가 제공되지 않는 외부 라이브러리 사용
