@@ -14,6 +14,10 @@
     - [Babel](#babel)
     - [ESLint](#eslint)
     - [Prettier](#prettier)
+  - [axios fetch 함수의 타입 정의하기](#axios-fetch-함수의-타입-정의하기)
+    - [1) interface 정의](#1-interface-정의)
+    - [2) sub interface 정의](#2-sub-interface-정의)
+    - [3) fetch 함수 반환 타입 정의](#3-fetch-함수-반환-타입-정의)
 - [🔫 Troubleshooting](#-troubleshooting)
   - [TypeScript에서 Promise를 사용할 때 발생하는 오류](#typescript에서-promise를-사용할-때-발생하는-오류)
   - [외부 라이브러리 import 시에 발생하는 오류](#외부-라이브러리-import-시에-발생하는-오류)
@@ -246,6 +250,94 @@ Prettier의 설정이 `.eslintrc.js` 파일의 `rules` 에 위치하고 있는�
   },
 }
 ```
+
+<br>
+
+## axios fetch 함수의 타입 정의하기
+axios로 데이터를 fetch하는 함수인 `fetchCovidSummary()` 의 반환 타입을 정의해보자.
+
+```ts
+function fetchCovidSummary() {
+  const url = 'https://api.covid19api.com/summary';
+  return axios.get(url);
+}
+```
+
+### 1) interface 정의
+chrome devtools의 network 탭이나 API spec을 확인하여 interface를 작성한다.
+
+object의 경우 우선 `any` 로 정의한 후 확장하도록 한다.
+
+```ts
+export interface CovidSummaryResponse {
+  Countries: any[];
+  Date: string;
+  Global: any;
+  Message: string;
+}
+```
+
+<br>
+
+### 2) sub interface 정의
+object 형태인 `Countries` 와 `Global` 의 타입을 정의해준다.
+
+```ts
+export interface Country {
+  Country: string;
+  CountryCode: string;
+  Date: string;
+  ID: string;
+  NewConfirmed: number;
+  NewDeaths: number;
+  NewRecovered: number;
+  Premium: any;
+  Slug: string;
+  TotalConfirmed: number;
+  TotalDeaths: number;
+  TotalRecovered: number;
+}
+
+export interface Global {
+  Date: string;
+  NewConfirmed: number;
+  NewDeaths: number;
+  NewRecovered: number;
+  TotalConfirmed: number;
+  TotalDeaths: number;
+  TotalRecovered: number;
+}
+```
+
+이전 단계에서 `any` 로 설정해둔 `CovidSummaryResponse` 의 타입을 구체화해준다.
+```ts
+export interface CovidSummaryResponse {
+  Countries: Country[];
+  Date: string;
+  Global: Global;
+  Message: string;
+}
+```
+
+<br>
+
+### 3) fetch 함수 반환 타입 정의
+`axios` 의 반환 값의 타입은 `Promise<AxiosResponse<T>>` 이므로 타입을 다음과 같이 정의한다.
+
+```ts
+import { AxiosResponse } from 'axios';
+import { CovidSummaryResponse } from './model/covid';
+
+function fetchCovidSummary(): Promise<AxiosResponse<CovidSummaryResponse>> {
+  const url = 'https://api.covid19api.com/summary';
+  return axios.get(url);
+}
+```
+
+> 이렇게 정의해주면 접근할 수 있는 property의 자동 완성이 지원된다. 👇
+
+![fetchCovidSummary](https://user-images.githubusercontent.com/31913666/171782124-8bf9b4af-e7d5-410f-9d73-20ab60816ec5.png)
+
 
 <br>
 

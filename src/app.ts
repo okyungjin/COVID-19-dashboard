@@ -1,4 +1,6 @@
+import { AxiosResponse } from 'axios';
 import { CovidSummaryResponse } from './model/covid';
+
 // utils
 function $(selector: string) {
   return document.querySelector(selector);
@@ -38,7 +40,7 @@ let isDeathLoading = false;
 const isRecoveredLoading = false;
 
 // api
-function fetchCovidSummary() {
+function fetchCovidSummary(): Promise<AxiosResponse<CovidSummaryResponse>> {
   const url = 'https://api.covid19api.com/summary';
   return axios.get(url);
 }
