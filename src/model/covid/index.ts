@@ -1,6 +1,31 @@
-export interface CovidSummaryResponse {
-  Countries: any[];
+export interface Country {
+  Country: string;
+  CountryCode: string;
   Date: string;
-  Global: any;
+  ID: string;
+  NewConfirmed: number;
+  NewDeaths: number;
+  NewRecovered: number;
+  Premium: any;
+  Slug: string;
+  TotalConfirmed: number;
+  TotalDeaths: number;
+  TotalRecovered: number;
+}
+
+export interface Global {
+  Date: string;
+  NewConfirmed: number;
+  NewDeaths: number;
+  NewRecovered: number;
+  TotalConfirmed: number;
+  TotalDeaths: number;
+  TotalRecovered: number;
+}
+
+export interface CovidSummaryResponse {
+  Countries: Country[];
+  Date: string;
+  Global: Global;
   Message: string;
 }
