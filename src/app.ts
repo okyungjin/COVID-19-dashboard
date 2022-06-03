@@ -1,5 +1,9 @@
 import { AxiosResponse } from 'axios';
-import { CovidSummaryResponse } from './model/covid';
+import {
+  CovidStatus,
+  CovidSummaryResponse,
+  CountryInfoResponse,
+} from './model/covid';
 
 // utils
 function $(selector: string) {
@@ -45,15 +49,12 @@ function fetchCovidSummary(): Promise<AxiosResponse<CovidSummaryResponse>> {
   return axios.get(url);
 }
 
-enum CovidStatus {
-  Confirmed = 'confirmed',
-  Recovered = 'recovered',
-  Deaths = 'deaths',
-}
-
-function fetchCountryInfo(countryCode: string, status: CovidStatus) {
+function fetchCountryInfo(
+  countryName: string,
+  status: CovidStatus
+): Promise<AxiosResponse<CountryInfoResponse>> {
   // params: confirmed, recovered, deaths
-  const url = `https://api.covid19api.com/country/${countryCode}/status/${status}`;
+  const url = `https://api.covid19api.com/country/${countryName}/status/${status}`;
   return axios.get(url);
 }
 
