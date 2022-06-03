@@ -1,3 +1,4 @@
+import { CovidSummaryResponse } from './model/covid';
 // utils
 function $(selector: string) {
   return document.querySelector(selector);
