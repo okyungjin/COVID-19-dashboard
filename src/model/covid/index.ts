@@ -36,7 +36,7 @@ export enum CovidStatus {
   Deaths = 'deaths',
 }
 
-export interface CountryInfoResponse {
+interface CountrySummaryInfo {
   Cases: number;
   City: string;
   CityCode: string;
@@ -48,3 +48,5 @@ export interface CountryInfoResponse {
   Province: string;
   Status: CovidStatus;
 }
+
+export type CountrySummaryInfoResponse = CountrySummaryInfo[];

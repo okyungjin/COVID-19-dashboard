@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import {
   CovidStatus,
   CovidSummaryResponse,
-  CountryInfoResponse,
+  CountrySummaryInfoResponse,
 } from './model/covid';
 
 // utils
@@ -52,7 +52,7 @@ function fetchCovidSummary(): Promise<AxiosResponse<CovidSummaryResponse>> {
 function fetchCountryInfo(
   countryName: string,
   status: CovidStatus
-): Promise<AxiosResponse<CountryInfoResponse>> {
+): Promise<AxiosResponse<CountrySummaryInfoResponse>> {
   // params: confirmed, recovered, deaths
   const url = `https://api.covid19api.com/country/${countryName}/status/${status}`;
   return axios.get(url);
