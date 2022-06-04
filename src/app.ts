@@ -1,4 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
+import Chart from 'chart.js';
+
 import {
   CovidStatus,
   CovidSummaryResponse,
