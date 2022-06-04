@@ -3,6 +3,7 @@ import {
   CovidStatus,
   CovidSummaryResponse,
   CountrySummaryInfoResponse,
+  Country,
 } from './model/covid';
 
 // utils
@@ -210,11 +211,11 @@ function setChartData(data: any) {
   renderChart(chartData, chartLabel);
 }
 
-function setTotalConfirmedNumber(data: any) {
+function setTotalConfirmedNumber(data: CovidSummaryResponse) {
   confirmedTotal.innerText = data.Countries.reduce(
-    (total: any, current: any) => (total += current.TotalConfirmed),
+    (total: number, current: Country) => (total += current.TotalConfirmed),
     0
-  );
+  ).toString();
 }
 
 function setTotalDeathsByWorld(data: any) {
