@@ -27,6 +27,7 @@
       - [1) `typeRoots` 에 경로 지정](#1-typeroots-에-경로-지정)
       - [2) `index.d.ts` 생성](#2-indexdts-생성)
   - [Uncaught SyntaxError: Unexpected token 'export'](#uncaught-syntaxerror-unexpected-token-export)
+  - [No overload matches this call.](#no-overload-matches-this-call)
 # 🙌 About COVID-19-dashboard
 JavaScript로 제작된 **COVID-19 Dashboard**에 TypeScript를 점진적으로 적용해나가는 프로젝트입니다.
 
@@ -534,3 +535,37 @@ html이 이해할 수 있도록 tsc로 컴파일된 `/built/app.js` 로 path를 
 }
 ```
 
+## No overload matches this call.
+
+tsconfig의 `strict` 옵션을 `true` 로 설정하고 발생하는 에러들을 수정하는 과정에서 `initEvents()` 에서 다음과 같은 오류가 발생했다.
+
+```ts
+function initEvents() {
+  rankList.addEventListener('click', handleListClick);
+}
+```
+
+```bash
+No overload matches this call.
+  Overload 1 of 2, '(type: keyof ElementEventMap, listener: (this: Element, ev: Event) => any, options?: boolean | AddEventListenerOptions | undefined): void', gave the following error.
+    Argument of type '"click"' is not assignable to parameter of type 'keyof ElementEventMap'.
+  Overload 2 of 2, '(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void', gave the following error.
+    Argument of type '(event: MouseEvent) => Promise<void>' is not assignable to parameter of type 'EventListenerOrEventListenerObject'.
+      Type '(event: MouseEvent) => Promise<void>' is not assignable to type 'EventListener'.
+        Types of parameters 'event' and 'evt' are incompatible.
+          Type 'Event' is missing the following properties from type 'MouseEvent': altKey, button, buttons, clientX, and 21 more.ts(2769)
+```
+
+<br>
+
+`addEventListener` 의 두 번째 인자에 들어와야 하는 타입과 `handleListClick` 의 타입이 일치하지 않기 때문에 발생하는 오류이다.
+
+> tsconfig.json에서 `"strict": true` 옵션을 설정함으로서 `"strictFunctionTypes": true` 가 적용되어 발생)
+
+`event` 의 타입을 `MouseEvent` 에서 `Event` 로 변경해주면 오류가 해결된다.
+
+```ts
+async function handleListClick(event: Event) {
+  // 생략
+}
+```
