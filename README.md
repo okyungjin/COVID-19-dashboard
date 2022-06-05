@@ -20,6 +20,7 @@
     - [2) sub interface 정의](#2-sub-interface-정의)
     - [3) fetch 함수 반환 타입 정의](#3-fetch-함수-반환-타입-정의)
   - [Optional Chaining](#optional-chaining)
+  - [DOM 유틸 함수 활용성을 높이는 타입 정의](#dom-유틸-함수-활용성을-높이는-타입-정의)
 - [🔫 Troubleshooting](#-troubleshooting)
   - [TypeScript에서 Promise를 사용할 때 발생하는 오류](#typescript에서-promise를-사용할-때-발생하는-오류)
   - [외부 라이브러리 import 시에 발생하는 오류](#외부-라이브러리-import-시에-발생하는-오류)
@@ -401,6 +402,68 @@ if (recoveredList === null || recoveredList === undefined) {
 ```
 
 <br>
+
+## DOM 유틸 함수 활용성을 높이는 타입 정의
+
+```ts
+function $(selector: string) {
+  return document.querySelector(selector);
+}
+```
+
+DOM 유틸 함수인 `$` 함수의 반환 타입이 `Element | null` 이기 때문에 타입 단언으로 인해 소스가 복잡해지고 있다.
+
+```ts
+const confirmedTotal = $('.confirmed-total') as HTMLSpanElement;
+const deathsTotal = $('.deaths') as HTMLParagraphElement;
+const recoveredTotal = $('.recovered') as HTMLParagraphElement;
+const lastUpdatedTime = $('.last-updated-time') as HTMLParagraphElement;
+const rankList = $('.rank-list') as HTMLOListElement;
+const deathsList = $('.deaths-list') as HTMLOListElement;
+const recoveredList = $('.recovered-list') as HTMLOListElement;
+```
+
+DOM 유틸 함수의 타입 정의를 통해 소스를 깔끔하게 작성해보자.
+
+<br>
+
+```ts
+function $<T extends HTMLElement>(selector: string) {
+  return document.querySelector(selector);
+}
+```
+
+`$` 에 제네릭 타입으로 `<T extends HTMLElement>` 를 받으면 `HTMLElement` 와 호환되는, 즉 `HTMLElement` 의 하위 타입만 제네릭 타입으로 선언할 수 있게 된다.
+
+
+`HTMLElement` 하위 타입 이외의 타입으로 정의하면 오류가 발생한다.
+```ts
+// 다음과 같이 사용하면 오류가 발생한다.
+const deathsTotal = $<string>('.deaths')
+```
+
+`$` 에서 받은 제네릭 타입을 사용하면 아래와 같이 정의할 수 있다.
+
+```ts
+function $<T extends HTMLElement>(selector: string) {
+  const element = document.querySelector(selector);
+  return element as T;
+}
+```
+
+타입 단언을 사용하지 않고 제네릭으로 조금 더 깔끔하게 소스를 작성할 수 있게 된다.
+```ts
+const confirmedTotal = $<HTMLSpanElement>('.confirmed-total');
+const deathsTotal = $<HTMLParagraphElement>('.deaths');
+const recoveredTotal = $<HTMLParagraphElement>('.recovered');
+const lastUpdatedTime = $<HTMLParagraphElement>('.last-updated-time');
+const rankList = $<HTMLOListElement>('.rank-list');
+const deathsList = $<HTMLOListElement>('.deaths-list');
+const recoveredList = $<HTMLOListElement>('.recovered-list');
+```
+
+> ❗️ 주의
+> `$` 의 인자로 넣는 `selector` 문자열에 오타가 있거나 존재하지 않는 element에 접근하려고 하면 오류가 발생한다. 본 프로젝트에서는 js로 타이핑 된 소스를 ts로 마이그레이션 하는 것을 목적으로 하고 있으므로 `element as T` 로 설정하였다. 실무에서는 이에 대한 대응이 필요하다.
 
 
 # 🔫 Troubleshooting
