@@ -8,6 +8,7 @@
     - [3) 명시적인 any 선언하기](#3-명시적인-any-선언하기)
     - [4) 프로젝트 환경 구성](#4-프로젝트-환경-구성)
     - [5) 외부 라이브러리 모듈화](#5-외부-라이브러리-모듈화)
+    - [6) `strict` 옵션 추가 및 타입 정의](#6-strict-옵션-추가-및-타입-정의)
   - [Arrow Function](#arrow-function)
   - [DOM 함수 타입 오류 해결하기](#dom-함수-타입-오류-해결하기)
   - [devDependencies에 추가한 라이브러리](#devdependencies에-추가한-라이브러리)
@@ -117,6 +118,47 @@ npm i -D typescript
 - Babel, ESLint, Prettier 환경 설정
 
 ### 5) 외부 라이브러리 모듈화
+
+
+### 6) `strict` 옵션 추가 및 타입 정의
+
+`tsconfig.json` 에서 `strict` 옵션을 `true` 로 설정한다.
+
+```diff
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "ES5", // tsc로 변환할 js version
+    "outDir": "./built",
+    "module": "ES2015",
+    "moduleResolution": "Node",
+    "lib": ["ES2015", "DOM", "DOM.Iterable"],
+    "noImplicitAny": true,
+    "typeRoots": ["./node_modules/@types", "types"],
++   "strict": true,
+  },
+  "include": ["./src/**/*"]
+}
+```
+
+> `strict` 옵션을 `true` 로 설정하면 추후에 일어날 수 있는 타입 오류를 미리 해결할 수 있다.
+
+`"strict": true` 로 설정하는 것은 아래 옵션들을 설정하는 것과 같은 의미이다.
+
+```json
+{
+  "strictNullChecks": true,
+  "strictFunctionTypes": true,
+  "strictBindCallApply": true,
+  "strictPropertyInitialization": true,
+  "noImplicitAny": true,
+  "alwaysStrict": true,
+}
+```
+
+설정을 적용하면 기존에 발생하지 않던 타입 에러가 발생하는 것을 확인할 수 있다.
+
+<img width="690" alt="activate-strict-option" src="https://user-images.githubusercontent.com/31913666/172038383-fa09d45c-f135-4cf7-b01f-c2652b0889fe.png">
 
 
 ## Arrow Function
