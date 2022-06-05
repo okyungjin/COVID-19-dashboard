@@ -19,6 +19,7 @@
     - [1) interface 정의](#1-interface-정의)
     - [2) sub interface 정의](#2-sub-interface-정의)
     - [3) fetch 함수 반환 타입 정의](#3-fetch-함수-반환-타입-정의)
+  - [Optional Chaining](#optional-chaining)
 - [🔫 Troubleshooting](#-troubleshooting)
   - [TypeScript에서 Promise를 사용할 때 발생하는 오류](#typescript에서-promise를-사용할-때-발생하는-오류)
   - [외부 라이브러리 import 시에 발생하는 오류](#외부-라이브러리-import-시에-발생하는-오류)
@@ -383,6 +384,24 @@ function fetchCovidSummary(): Promise<AxiosResponse<CovidSummaryResponse>> {
 
 
 <br>
+
+## Optional Chaining
+
+Optional Chaining을 사용하면 간결한 문법으로 null 혹은 undefined 값을 체크할 수 있다.
+
+```ts
+recoveredList?.appendChild(li);
+
+// Optional Chaining을 풀어서 쓰면 다음과 같다.
+if (recoveredList === null || recoveredList === undefined) {
+  return;
+} else {
+  recoveredList.appendChild(li);
+}
+```
+
+<br>
+
 
 # 🔫 Troubleshooting
 ## TypeScript에서 Promise를 사용할 때 발생하는 오류
