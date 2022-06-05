@@ -74,23 +74,26 @@ function initEvents() {
 }
 
 async function handleListClick(event: Event) {
-  let selectedId: string;
+  let selectedId;
   if (
     event.target instanceof HTMLParagraphElement ||
     event.target instanceof HTMLSpanElement
   ) {
-    selectedId = event.target.parentElement.id;
+    selectedId = event.target.parentElement
+      ? event.target.parentElement.id
+      : undefined;
   }
   if (event.target instanceof HTMLLIElement) {
     selectedId = event.target.id;
   }
-  if (isDeathLoading) {
-    return;
-  }
+
+  if (isDeathLoading || !selectedId) return;
+
   clearDeathList();
   clearRecoveredList();
   startLoadingAnimation();
   isDeathLoading = true;
+
   const { data: deathResponse } = await fetchCountryInfo(
     selectedId,
     CovidStatus.Deaths
@@ -103,6 +106,7 @@ async function handleListClick(event: Event) {
     selectedId,
     CovidStatus.Confirmed
   );
+
   endLoadingAnimation();
   setDeathsList(deathResponse);
   setTotalDeathsByCountry(deathResponse);
